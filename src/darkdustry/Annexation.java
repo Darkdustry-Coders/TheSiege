@@ -65,7 +65,7 @@ public class Annexation extends Plugin {
                 list.sort(Map.Entry.comparingByValue());
                 reverse(list);
 
-                String progress = "winscore is " + winScore;
+                String progress = "Очки для победы: " + winScore;
 
                 int count = 0;
                 for (Map.Entry<Team, Integer> entry : list) {
