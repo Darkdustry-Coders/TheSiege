@@ -29,6 +29,8 @@ public class Annexation extends Plugin {
     @Override
     public void init() {
 
+        Vars.state.rules.coreCapture = true;
+
         Timer.schedule(() -> {
 
             if (!Vars.state.serverPaused) {
