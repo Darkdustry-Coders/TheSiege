@@ -90,6 +90,10 @@ public class Annexation extends Plugin {
             scores.clear();
             lastIncrease.clear();
         });
+
+        Events.on(EventType.coreChangeEvent.class, e -> {
+            // TODO: синхронизация всех игроков
+        });
         
         Timer.schedule(() -> {
 
