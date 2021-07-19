@@ -90,5 +90,47 @@ public class Annexation extends Plugin {
             scores.clear();
             lastIncrease.clear();
         });
+        
+        Timer.schedule(() -> {
+
+            HashMap<Team, Integer> amount = new HashMap<>();
+            for (Teams.TeamData team : Vars.state.teams.active) {
+                if (team.team == Team.purple) continue;
+                amount.put(team.team, 0);
+            }
+
+            ArrayList<Player> players = new ArrayList<>();
+            Groups.player.each(player -> {
+                if (player.team() == Team.purple) {
+                    players.add(player);
+                } else {
+                    int count = amount.getOrDefault(player.team(), 0);
+                    amount.put(player.team(), count + 1);
+                }
+            });
+
+            if (players.size() > 0) {
+
+                List<Map.Entry<Team, Integer>> list = new ArrayList<>(amount.entrySet());
+                list.sort(Map.Entry.comparingByValue());
+
+                for (Player player : players) {
+
+                    Map.Entry<Team, Integer> lastEntry = list.get(0);
+                    int index = -1;
+                    for (Map.Entry<Team, Integer> entry : list) {
+                        index++;
+                        if (lastEntry.getValue() < entry.getValue()) {
+                            break;
+                        }
+                        lastEntry = entry;
+                    }
+
+                    Map.Entry<Team, Integer> newEntry = new AbstractMap.SimpleEntry<>(lastEntry.getKey(), lastEntry.getValue() + 1);
+                    list.set(index,  newEntry);
+                    player.team(lastEntry.getKey());
+                }
+            }
+        }, 0, 1);
     }
 }
