@@ -81,6 +81,7 @@ public class Annexation extends Plugin {
 
             if (scores.size() == 1) {
                 Events.fire(new EventType.GameOverEvent(scores.keySet().stream().findFirst().get()));
+                Call.sendMessage("Игра окончена! Победила команда: "); //Вывод названия победившей команды
             }
 
         }, 0, updateInterval);
