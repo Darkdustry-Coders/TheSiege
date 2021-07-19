@@ -37,7 +37,7 @@ public class Annexation extends Plugin {
                 Seq<TeamData> teams = Vars.state.teams.present;
                 for (TeamData team : teams) {
                     int scoreIncrease = 0;
-                    if (team.team == Team.derelict) continue;
+                    if (team.team == Team.purple) continue;
                     for (Building core : team.cores) {
                         scoreIncrease += core.block.size;
                     }
