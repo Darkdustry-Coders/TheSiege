@@ -1,11 +1,11 @@
 {
-  "name": "Plugin",
-  "displayName": "Plugin",
-  "description": "It is a plugin",
-  "author": "MinDurka",
-  "main": "mindurka.Template",
+  "name": "Annexation",
+  "displayName": "Annexation Plugin",
+  "description": "It is a gamemode for DarkDustry servers",
+  "author": "Darkdustry",
+  "main": "darkdustry.Annexation",
   "hidden": false,
   "java": true,
-  "version": "2.1",
-  "minGameVersion": 127.2
+  "version": "1.0",
+  "minGameVersion": 128.1
 }
