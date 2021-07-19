@@ -91,8 +91,8 @@ public class Annexation extends Plugin {
             lastIncrease.clear();
         });
 
-        Events.on(EventType.coreChangeEvent.class, e -> {
-            // TODO: синхронизация всех игроков
+        Events.on(EventType.CoreChangeEvent.class, e -> {
+            Groups.player.each(player -> player.snapSync());
         });
         
         Timer.schedule(() -> {
