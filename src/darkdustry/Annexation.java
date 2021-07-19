@@ -92,10 +92,12 @@ public class Annexation extends Plugin {
             lastIncrease.clear();
         });
 
-        Events.on(EventType.CoreChangeEvent.class, e -> {
-            Groups.player.each(player -> player.snapSync());
+        Events.on(BlockDestroyEvent.class, event -> {
+            if(event.tile.block() instanceof CoreBlock) {
+                Groups.player.each(player -> player.snapSync());
+            }
         });
-        
+      
         Timer.schedule(() -> {
 
             HashMap<Team, Integer> amount = new HashMap<>();
