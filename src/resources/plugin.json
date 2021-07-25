@@ -1,9 +1,9 @@
 {
-  "name": "Annexation",
-  "displayName": "Annexation Plugin",
+  "name": "Siege",
+  "displayName": "The Siege Plugin",
   "description": "It is a gamemode for DarkDustry servers",
   "author": "Darkdustry",
-  "main": "darkdustry.Annexation",
+  "main": "darkdustry.Siege",
   "hidden": false,
   "java": true,
   "version": "1.0",
