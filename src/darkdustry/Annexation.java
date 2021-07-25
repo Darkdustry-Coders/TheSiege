@@ -10,6 +10,15 @@ import mindustry.game.EventType.*;
 import mindustry.game.Teams.*;
 import mindustry.gen.*;
 import mindustry.mod.Plugin;
+import mindustry.content.Bullets;
+import mindustry.content.Fx;
+import mindustry.entities.Fires;
+import mindustry.entities.Units;
+import mindustry.entities.bullet.BulletType;
+import mindustry.world.blocks.storage.*;
+
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +43,7 @@ public class Annexation extends Plugin {
                 Seq<TeamData> teams = Vars.state.teams.present;
                 for (TeamData team : teams) {
                     int scoreIncrease = 0;
-                    if (team.team == Team.purple) continue;
+                    if (team.team == Team.purple || team.team == Team.derelict) continue;
                     for (Building core : team.cores) {
                         scoreIncrease += core.block.size;
                     }
@@ -95,13 +104,13 @@ public class Annexation extends Plugin {
 
             HashMap<Team, Integer> amount = new HashMap<>();
             for (Teams.TeamData team : Vars.state.teams.active) {
-                if (team.team == Team.purple) continue;
+                if (team.team == Team.purple || team.team == Team.derelict) continue;
                 amount.put(team.team, 0);
             }
 
             ArrayList<Player> players = new ArrayList<>();
             Groups.player.each(player -> {
-                if (player.team() == Team.purple) {
+                if (player.team() == Team.purple || player.team() == Team.derelict) {
                     players.add(player);
                 } else {
                     int count = amount.getOrDefault(player.team(), 0);
