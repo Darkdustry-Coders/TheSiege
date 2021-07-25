@@ -1,3 +1,5 @@
+package darkdustry;
+
 import arc.files.Fi;
 import arc.struct.*;
 import arc.util.*;
