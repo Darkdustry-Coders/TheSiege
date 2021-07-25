@@ -10,7 +10,6 @@ import mindustry.game.EventType.*;
 import mindustry.game.Teams.*;
 import mindustry.gen.*;
 import mindustry.mod.Plugin;
-import mindustry.world.blocks.storage.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +27,6 @@ public class Annexation extends Plugin {
 
     @Override
     public void init() {
-
-        Vars.state.rules.coreCapture = true;
 
         Timer.schedule(() -> {
 
@@ -89,15 +86,9 @@ public class Annexation extends Plugin {
 
         }, 0, updateInterval);
 
-        Events.on(EventType.WorldLoadEvent.class, e -> {
+        Events.on(WorldLoadEvent.class, e -> {
             scores.clear();
             lastIncrease.clear();
-        });
-
-        Events.on(BlockDestroyEvent.class, event -> {
-            if(event.tile.block() instanceof CoreBlock) {
-                Groups.player.each(player -> player.snapSync());
-            }
         });
       
         Timer.schedule(() -> {
