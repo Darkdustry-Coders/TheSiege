@@ -74,6 +74,9 @@ public class Siege extends Plugin {
                 bundled(action.player, "server.foreshadow-limit");
                 return false;
             }
+            if (action.type == Administration.ActionType.depositItem) {
+                return false;
+            }
             return true;
         });
 
