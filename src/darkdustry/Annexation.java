@@ -21,7 +21,7 @@ public class Annexation extends Plugin {
     HashMap<Team, Integer> scores = new HashMap<>();
     HashMap<Team, Integer> lastIncrease = new HashMap<>();
 
-    int winScore = 25000;
+    int winScore = 50000;
     int updateInterval = 5;
     int topLength = 5;
 
@@ -64,7 +64,7 @@ public class Annexation extends Plugin {
                 list.sort(Map.Entry.comparingByValue());
                 reverse(list);
 
-                String progress = "Очки для победы: " + winScore;
+                String progress = "Winscore: " + winScore;
 
                 int count = 0;
                 for (Map.Entry<Team, Integer> entry : list) {
@@ -81,7 +81,7 @@ public class Annexation extends Plugin {
             if (scores.size() == 1) {
                 Team winner = scores.keySet().stream().findFirst().get();
                 Events.fire(new EventType.GameOverEvent(winner));
-                Call.sendMessage("Игра окончена! Победила команда: [#" + winner.color.toString() + "]" + winner.name);
+                Call.sendMessage("Game over! Winner: [#" + winner.color.toString() + "]" + winner.name);
             }
 
         }, 0, updateInterval);
