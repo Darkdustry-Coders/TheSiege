@@ -75,7 +75,9 @@ public class Siege extends Plugin {
                 return false;
             }
             if (action.type == Administration.ActionType.depositItem) {
-                return false;
+                if (action.item == Items.blastCompound || action.item == Items.pyratite) {
+                    return false;
+                }
             }
             return true;
         });
