@@ -84,9 +84,9 @@ public class Siege extends Plugin {
                 }, (team) -> {
                     Vars.content.items().each((item) -> {
                         team.core().items.add(item, 50);
-            }
-                    });
+		    });
                 });
+            }
 	    // String progress = "[green]Until the blue wins: [red]" + winScore;
 	    winScore -= Vars.state.serverPaused ? 0 : updateInterval;
 	    Groups.player.each(p -> Call.infoPopup(p.con(), L10NBundle.format("server.progress", findLocale(p.locale), winScore), updateInterval, Align.bottom, 0, 0, 0, 0));
