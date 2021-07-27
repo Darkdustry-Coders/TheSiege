@@ -6,6 +6,6 @@ First, make sure you have JDK 14 installed. Then, setup [plugin.json](src/main/r
 * Windows: `gradlew jar`
 * *nix/Mac OS: `./gradlew jar`
 
-### Troubleshooting.
+### Troubleshooting..
 
 * If the terminal returns `Permission denied` or `Command not found`, run `chmod +x ./gradlew`.
