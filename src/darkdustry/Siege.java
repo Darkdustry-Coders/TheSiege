@@ -92,10 +92,11 @@ public class Siege extends Plugin {
 		    });
                 });
             }
-	    // String progress = "[green]Until the blue wins: [red]" + winScore;
+
 	    winScore -= Vars.state.serverPaused ? 0 : updateInterval;
 	    Groups.player.each(p -> Call.infoPopup(p.con(), L10NBundle.format("server.progress", findLocale(p.locale), winScore), updateInterval, Align.bottom, 0, 0, 0, 0));
 	    if(winScore<1){
+                winScore = 15000;
 		Events.fire(new EventType.GameOverEvent(Team.blue));
 		sendToChat("server.blue-won");
 	    }
