@@ -46,7 +46,7 @@ public class Siege extends Plugin {
             UnitTypes.quad.weapons.clear();
 
             for(int i = 0; i < 11; i++) {
-                UnitTypes.poly.spawn(Team.blue, (float)Vars.world.width() / 2, (float)Vars.world.height() / 2);
+                UnitTypes.poly.spawn(Team.blue, (float)Vars.world.width() * 4, (float)Vars.world.height() * 4);
             }
 
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 800;
@@ -56,16 +56,6 @@ public class Siege extends Plugin {
 
             Vars.state.rules.unitDamageMultiplier = 1.5F;
             Bullets.missileSurge.damage = 12.0F;
-
-            Iterator var1 = Groups.player.iterator();
-            while(var1.hasNext()) {
-                Player player = (Player)var1.next();
-                if (player.team() == Team.blue) {
-                    player.team(Team.green);
-                } else {
-                    player.team(Team.blue);
-                }
-            }
         });
 
         Vars.netServer.admins.addActionFilter(action -> {
