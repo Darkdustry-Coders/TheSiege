@@ -11,11 +11,9 @@ import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.mod.Plugin;
 import mindustry.net.Administration;
-import mindustry.net.Administration.PlayerInfo;
 import mindustry.net.NetConnection;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.units.*;
-import mindustry.content.*;
 
 import java.util.Iterator;
 import java.util.HashSet;
@@ -30,7 +28,7 @@ public class Siege extends Plugin {
     public void init() {
         Vars.netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
-                return !(action.block instanceof Turret && !action.block == Blocks.wave);
+                return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
                 return !(action.block instanceof UnitFactory && action.block instanceof Reconstructor);
 	    }
