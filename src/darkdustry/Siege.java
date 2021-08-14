@@ -32,7 +32,7 @@ public class Siege extends Plugin {
 	    }
         });
 
-        Vars.netServer.admins.addActionFilter(action -> {
+        Vars.netServer.admins.addActionFilter((action) -> {
             if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
                     Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 8) {
                 bundled(action.player, "server.foreshadow-limit");
