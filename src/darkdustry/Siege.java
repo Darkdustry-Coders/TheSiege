@@ -34,7 +34,7 @@ public class Siege extends Plugin {
 
         Vars.netServer.admins.addActionFilter((action) -> {
             if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
-                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 8) {
+                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 4) {
                 bundled(action.player, "server.foreshadow-limit");
                 return false;
             }
@@ -47,22 +47,21 @@ public class Siege extends Plugin {
 
         Events.on(WorldLoadEvent.class, (c) -> {
             winScore = 1500;
-            UnitTypes.poly.weapons.clear();
 
+            UnitTypes.poly.health = 4000;
+            UnitTypes.poly.weapons.clear();
             for(int i = 0; i < 11; i++) {
                 UnitTypes.poly.spawn(Team.blue, (float)Vars.world.width() * 4, (float)Vars.world.height() * 4);
             }
 
-            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 800;
-
-            UnitTypes.eclipse.health = 22000.0F;
-            UnitTypes.corvus.health = 22000.0F;
-
+            // Нерф знамения и циклона
             Vars.state.rules.unitDamageMultiplier = 1.5F;
             Bullets.missileSurge.damage = 12.0F;
+            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 800;
         });
 
         Events.on(PlayerJoin.class, event -> {
+            // Предлагаем использовать /info
             bundled(event.player, "the-siege.motd");
         });
 
@@ -89,7 +88,7 @@ public class Siege extends Plugin {
 
     @Override
     public void registerClientCommands(CommandHandler handler) {
-        handler.<Player>register("changeteam", "Change team - 1 time per game.", (args, player) -> {
+        handler.<Player>register("changeteam", "Change team - once per game.", (args, player) -> {
             if (cooldowns.contains(player.uuid())) {
                 bundled(player, "commands.team.cooldown");
                 return;
