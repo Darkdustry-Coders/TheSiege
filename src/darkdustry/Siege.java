@@ -100,18 +100,22 @@ public class Siege extends Plugin {
                 bundled(player, "commands.team.cooldown");
                 return;
             }
-            if(player.team() == Team.green) {
-                player.team(Team.blue);
-                bundled(player, "commands.team.changed.blue");
-                cooldowns.add(player.uuid());
-                player.unit().kill();
-            } else if (player.team() == Team.blue) {
-                player.team(Team.green);
-                bundled(player, "commands.team.changed.green");
-                cooldowns.add(player.uuid());
-                player.unit().kill();
-            } else {
-                bundled(player, "commands.team.error");
+            switch(player.team()) {
+                case Team.blue -> {
+                    player.team(Team.green);
+                    bundled(player, "commands.team.changed", colorizedTeam(Team.green));
+                    cooldowns.add(player.uuid());
+                    player.unit().kill();
+                }
+                case Team.green -> {
+                    player.team(Team.blue);
+                    bundled(player, "commands.team.changed", colorizedTeam(Team.blue));
+                    cooldowns.add(player.uuid());
+                    player.unit().kill();
+                }
+                default -> {
+                    bundled(player, "commands.team.error");
+                }
             }
         });
     }
@@ -130,5 +134,9 @@ public class Siege extends Plugin {
 
     public static void bundled(Player player, String key, Object... values) {
         player.sendMessage(L10NBundle.format(key, findLocale(player.locale), values));
+    }
+
+    public static String colorizedTeam(Team team){
+        return Strings.format("[#@]@", team.color, team);
     }
 }
