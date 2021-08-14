@@ -30,9 +30,9 @@ public class Siege extends Plugin {
     public void init() {
         Vars.netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
-                return !(action.block instanceof Turret);
+                return !(action.block instanceof Turret && !action.block == Blocks.wave);
             } else {
-                return !(action.block instanceof UnitFactory);
+                return !(action.block instanceof UnitFactory && action.block instanceof Reconstructor);
 	    }
         });
 
@@ -42,8 +42,6 @@ public class Siege extends Plugin {
         Events.on(WorldLoadEvent.class, (c) -> {
             winScore = 1500;
             UnitTypes.poly.weapons.clear();
-            UnitTypes.mega.weapons.clear();
-            UnitTypes.quad.weapons.clear();
 
             for(int i = 0; i < 11; i++) {
                 UnitTypes.poly.spawn(Team.blue, (float)Vars.world.width() * 4, (float)Vars.world.height() * 4);
@@ -100,22 +98,18 @@ public class Siege extends Plugin {
                 bundled(player, "commands.team.cooldown");
                 return;
             }
-            switch(player.team()) {
-                case Team.blue -> {
-                    player.team(Team.green);
-                    bundled(player, "commands.team.changed", colorizedTeam(Team.green));
-                    cooldowns.add(player.uuid());
-                    player.unit().kill();
-                }
-                case Team.green -> {
-                    player.team(Team.blue);
-                    bundled(player, "commands.team.changed", colorizedTeam(Team.blue));
-                    cooldowns.add(player.uuid());
-                    player.unit().kill();
-                }
-                default -> {
-                    bundled(player, "commands.team.error");
-                }
+            if (player.team() == Team.blue) {
+                player.team(Team.green);
+                bundled(player, "commands.team.changed", colorizedTeam(Team.green));
+                cooldowns.add(player.uuid());
+                player.unit().kill();
+            } else if (player.team() == Team.green) {
+                player.team(Team.blue);
+                bundled(player, "commands.team.changed", colorizedTeam(Team.blue));
+                cooldowns.add(player.uuid());
+                player.unit().kill();
+            } else {
+                bundled(player, "commands.team.error");
             }
         });
     }
