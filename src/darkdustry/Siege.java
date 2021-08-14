@@ -53,7 +53,7 @@ public class Siege extends Plugin {
         });
 
         Events.on(PlayerJoin.class, event -> {
-            bundled(player, "the-siege-motd");
+            bundled(event.player, "the-siege-motd");
         });
 
         Vars.netServer.admins.addActionFilter(action -> {
