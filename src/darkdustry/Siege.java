@@ -63,7 +63,7 @@ public class Siege extends Plugin {
         });
 
         Events.on(PlayerJoin.class, event -> {
-            bundled(event.player, "the-siege-motd");
+            bundled(event.player, "the-siege.motd");
         });
 
 	Timer.schedule(() -> {
