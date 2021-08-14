@@ -24,7 +24,7 @@ public class Siege extends Plugin {
     int winScore = 1500;
 
     public void init() {
-        Vars.netServer.admins.addActionFilter(action -> {
+        Vars.netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
