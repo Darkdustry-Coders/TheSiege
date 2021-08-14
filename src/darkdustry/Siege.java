@@ -38,6 +38,7 @@ public class Siege extends Plugin {
                 bundled(action.player, "server.foreshadow-limit");
                 return false;
             }
+            return true;
         });
 
         Events.on(GameOverEvent.class, (e) -> {
