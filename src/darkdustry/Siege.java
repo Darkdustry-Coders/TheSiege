@@ -28,7 +28,7 @@ public class Siege extends Plugin {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
-                return !(action.block instanceof UnitFactory && action.block instanceof Reconstructor);
+                return !(action.block instanceof UnitFactory || action.block instanceof Reconstructor);
 	    }
         });
 
