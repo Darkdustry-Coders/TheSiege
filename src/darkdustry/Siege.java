@@ -24,7 +24,7 @@ public class Siege extends Plugin {
     int winScore = 1500;
 
     public void init() {
-        Vars.netServer.admins.addActionFilter((action) -> {
+        Vars.netServer.admins.addActionFilter(action -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
@@ -32,9 +32,18 @@ public class Siege extends Plugin {
 	    }
         });
 
+        Vars.netServer.admins.addActionFilter(action -> {
+            if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
+                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 8) {
+                bundled(action.player, "server.foreshadow-limit");
+                return false;
+            }
+        });
+
         Events.on(GameOverEvent.class, (e) -> {
             cooldowns.clear();
         });
+
         Events.on(WorldLoadEvent.class, (c) -> {
             winScore = 1500;
             UnitTypes.poly.weapons.clear();
@@ -54,20 +63,6 @@ public class Siege extends Plugin {
 
         Events.on(PlayerJoin.class, event -> {
             bundled(event.player, "the-siege-motd");
-        });
-
-        Vars.netServer.admins.addActionFilter(action -> {
-            if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
-                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 8) {
-                bundled(action.player, "server.foreshadow-limit");
-                return false;
-            }
-            if (action.type == Administration.ActionType.depositItem) {
-                if (action.item == Items.blastCompound || action.item == Items.pyratite) {
-                    return false;
-                }
-            }
-            return true;
         });
 
 	Timer.schedule(() -> {
@@ -111,6 +106,10 @@ public class Siege extends Plugin {
             } else {
                 bundled(player, "commands.team.error");
             }
+        });
+
+        handler.<Player>register("info", "Information about gamemode.", (args, player) -> {
+            Call.infoMessage(player.con, L10NBundle.format("commands.info", findLocale(player.locale)));
         });
     }
 
