@@ -4,7 +4,6 @@ import arc.Events;
 import arc.struct.ObjectMap;
 import arc.util.*;
 import arc.util.Timer;
-import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
@@ -15,6 +14,7 @@ import mindustry.net.NetConnection;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.units.*;
 
+import static mindustry.Vars;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Locale;
@@ -24,7 +24,7 @@ public class Siege extends Plugin {
     int winScore = 1500;
 
     public void init() {
-        Vars.netServer.admins.addActionFilter((action) -> {
+        netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
@@ -32,7 +32,7 @@ public class Siege extends Plugin {
 	    }
         });
 
-        Vars.netServer.admins.addActionFilter((action) -> {
+        netServer.admins.addActionFilter((action) -> {
             if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
                     Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 4) {
                 bundled(action.player, "server.foreshadow-limit");
@@ -55,7 +55,7 @@ public class Siege extends Plugin {
             }
 
             // Нерф знамения и циклона
-            Vars.state.rules.unitDamageMultiplier = 1.5F;
+            state.rules.unitDamageMultiplier = 1.5F;
             Bullets.missileSurge.damage = 12.0F;
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 800;
         });
@@ -66,17 +66,13 @@ public class Siege extends Plugin {
         });
 
 	Timer.schedule(() -> {
-            if (Vars.state.serverPaused == false) {
-	        Vars.state.teams.active.each((team) -> {
+            if (!state.serverPaused) {
+	        state.teams.active.each((team) -> {
                     return team.core() != null;
-                }, (team) -> {
-                    Vars.content.items().each((item) -> {
-                        team.core().items.add(item, 50);
-		    });
-                });
+                }, (team) -> content.items().each((item) -> team.core().items.add(item, 50)));
             }
 
-	    winScore -= Vars.state.serverPaused ? 0 : 1;
+	    winScore -= state.serverPaused ? 0 : 1;
 	    Groups.player.each(p -> Call.infoPopup(p.con(), L10NBundle.format("server.progress", findLocale(p.locale), winScore), 1, Align.bottom, 0, 0, 0, 0));
 	    if(winScore<1){
                 winScore = 15000;
