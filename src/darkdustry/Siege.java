@@ -14,7 +14,7 @@ import mindustry.net.NetConnection;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.units.*;
 
-import static mindustry.Vars;
+import static mindustry.Vars.*;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Locale;
