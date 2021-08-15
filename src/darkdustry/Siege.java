@@ -51,7 +51,7 @@ public class Siege extends Plugin {
             UnitTypes.poly.health = 4000;
             UnitTypes.poly.weapons.clear();
             for(int i = 0; i < 11; i++) {
-                UnitTypes.poly.spawn(Team.blue, (float)Vars.world.width() * 4, (float)Vars.world.height() * 4);
+                UnitTypes.poly.spawn(Team.blue, (float)world.width() * 4, (float)world.height() * 4);
             }
 
             // Нерф знамения и циклона
