@@ -22,6 +22,7 @@ import java.util.Locale;
 public class Siege extends Plugin {
     private final HashSet<String> cooldowns = new HashSet<>();
     int winScore = 1500;
+    int foreshadowLimit = 4;
 
     public void init() {
         netServer.admins.addActionFilter((action) -> {
@@ -34,8 +35,8 @@ public class Siege extends Plugin {
 
         netServer.admins.addActionFilter((action) -> {
             if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow &&
-                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > 4) {
-                bundled(action.player, "server.foreshadow-limit");
+                    Groups.build.count(b -> b.team == action.player.team() && b.block == action.block) > foreshadowLimit) {
+                bundled(action.player, "server.foreshadow-limit", foreshadowLimit);
                 return false;
             }
             return true;
