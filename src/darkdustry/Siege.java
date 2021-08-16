@@ -1,7 +1,7 @@
 package darkdustry;
 
 import arc.Events;
-import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.*;
 import arc.util.Timer;
 import mindustry.content.*;
@@ -15,12 +15,10 @@ import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.units.*;
 
 import static mindustry.Vars.*;
-import java.util.Iterator;
-import java.util.HashSet;
 import java.util.Locale;
 
 public class Siege extends Plugin {
-    private final HashSet<String> cooldowns = new HashSet<>();
+    private final Seq<String> cooldowns = new Seq<>();
     int winScore = 1500;
     int foreshadowLimit = 4;
 
@@ -90,19 +88,11 @@ public class Siege extends Plugin {
                 bundled(player, "commands.team.cooldown");
                 return;
             }
-            if (player.team() == Team.blue) {
-                player.team(Team.green);
-                bundled(player, "commands.team.changed", colorizedTeam(Team.green));
-                cooldowns.add(player.uuid());
-                player.unit().kill();
-            } else if (player.team() == Team.green) {
-                player.team(Team.blue);
-                bundled(player, "commands.team.changed", colorizedTeam(Team.blue));
-                cooldowns.add(player.uuid());
-                player.unit().kill();
-            } else {
-                bundled(player, "commands.team.error");
-            }
+            Team team = player.team() == Team.green ? Team.blue : Team.green;
+            player.team(team);
+            bundled(player, "commands.team.changed", colorizedTeam(team));
+            cooldowns.add(player.uuid());
+            player.unit().kill();
         });
 
         handler.<Player>register("info", "Information about gamemode.", (args, player) -> {
