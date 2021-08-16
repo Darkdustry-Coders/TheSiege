@@ -68,7 +68,7 @@ public class Siege extends Plugin {
             if (!state.serverPaused) {
 	        state.teams.active.each((team) -> {
                     return team.core() != null;
-                }, (team) -> content.items().each((item) -> team.core().items.add(item, 50)));
+                }, (team) -> content.items().each((item) -> team.core().items.add(item, 115)));
             }
 
 	    winScore -= state.serverPaused ? 0 : 1;
