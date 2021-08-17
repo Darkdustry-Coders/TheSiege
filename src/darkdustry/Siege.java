@@ -49,12 +49,13 @@ public class Siege extends Plugin {
 
             UnitTypes.poly.health = 5000;
             UnitTypes.poly.weapons.clear();
-            for(int i = 0; i < 11; i++) {
+            for(int i = 0; i < 6; i++) {
                 UnitTypes.poly.spawn(Team.blue, (float)world.width() * 4, (float)world.height() * 4);
             }
 
             // Нерф знамения и циклона
-            state.rules.unitDamageMultiplier = 1.33F;
+            state.rules.unitDamageMultiplier = 2.0F;
+            state.rules.unitBuildSpeedMultiplier = 2.0F;
             Bullets.missileSurge.damage = 10.0F;
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
