@@ -47,16 +47,16 @@ public class Siege extends Plugin {
         Events.on(WorldLoadEvent.class, (c) -> {
             winScore = 1500;
 
-            UnitTypes.poly.health = 4000;
+            UnitTypes.poly.health = 5000;
             UnitTypes.poly.weapons.clear();
             for(int i = 0; i < 11; i++) {
                 UnitTypes.poly.spawn(Team.blue, (float)world.width() * 4, (float)world.height() * 4);
             }
 
             // Нерф знамения и циклона
-            state.rules.unitDamageMultiplier = 1.5F;
-            Bullets.missileSurge.damage = 12.0F;
-            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 800;
+            state.rules.unitDamageMultiplier = 1.33F;
+            Bullets.missileSurge.damage = 10.0F;
+            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
 
         Events.on(PlayerJoin.class, event -> {
@@ -68,7 +68,7 @@ public class Siege extends Plugin {
             if (!state.serverPaused) {
 	        state.teams.active.each((team) -> {
                     return team.core() != null;
-                }, (team) -> content.items().each((item) -> team.core().items.add(item, 50)));
+                }, (team) -> content.items().each((item) -> team.core().items.add(item, 100)));
             }
 
 	    winScore -= state.serverPaused ? 0 : 1;
