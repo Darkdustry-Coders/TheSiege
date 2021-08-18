@@ -63,15 +63,15 @@ public class Siege extends Plugin {
             if (!state.serverPaused) {
 	        state.teams.active.each((team) -> {
                     return team.core() != null;
-                }, (team) -> content.items().each((item) -> team.core().items.add(item, (int)team.cores.sizeд * 100)));
+                }, (team) -> content.items().each((item) -> team.core().items.add(item, (int)team.cores.size * 100)));
             }
 
 	    winScore -= state.serverPaused ? 0 : 1;
 	    Groups.player.each(p -> Call.infoPopup(p.con(), L10NBundle.format("server.progress", findLocale(p.locale), winScore), 1, Align.bottom, 0, 0, 0, 0));
 	    if(winScore<1){
                 winScore = 15000;
+                sendToChat("server.blue-won");
 		Events.fire(new EventType.GameOverEvent(Team.blue));
-		sendToChat("server.blue-won");
 	    }
 	}, 0, 1);
     }
