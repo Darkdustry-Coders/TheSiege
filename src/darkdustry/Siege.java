@@ -50,6 +50,7 @@ public class Siege extends Plugin {
             state.rules.unitDamageMultiplier = 2.0F;
             state.rules.unitBuildSpeedMultiplier = 2.0F;
             state.rules.blockDamageMultiplier = 0.6F;
+            UnitTypes.poly.weapons.clear();
             Bullets.missileSurge.damage = 10.0F;
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
