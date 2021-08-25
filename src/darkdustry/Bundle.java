@@ -8,7 +8,7 @@ import mindustry.Vars;
 import java.text.MessageFormat;
 import java.util.*;
 
-public class L10NBundle{
+public class Bundle{
 
     private static final ObjectMap<Locale, StringMap> bundles = new ObjectMap<>();
 
@@ -39,7 +39,7 @@ public class L10NBundle{
         Log.debug("Loaded locales: @", Arrays.toString(supportedLocales));
     }
 
-    private L10NBundle(){
+    private Bundle(){
     }
 
     public static String get(String key, Locale locale){
