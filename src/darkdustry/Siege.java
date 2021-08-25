@@ -57,7 +57,7 @@ public class Siege extends Plugin {
         });
 
         Events.on(PlayerJoin.class, event -> {
-            if(event.player.getInfo().timesJoined <= 1) {
+            if(event.player.getInfo().timesJoined >= 1) {
                 String[][] optionsFirst = {
                         {Bundle.format("server.first-join.yes", findLocale(event.player.locale))},
                         {Bundle.format("server.first-join.no", findLocale(event.player.locale))}
