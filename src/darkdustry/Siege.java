@@ -68,7 +68,7 @@ public class Siege extends Plugin {
             }
 
 	    winScore -= state.serverPaused ? 0 : 1;
-	    Groups.player.each(p -> Call.infoPopup(p.con(), L10NBundle.format("server.progress", findLocale(p.locale), winScore), 1, Align.bottom, 0, 0, 0, 0));
+	    Groups.player.each(p -> Call.infoPopup(p.con(), Bundle.format("server.progress", findLocale(p.locale), winScore), 1, Align.bottom, 0, 0, 0, 0));
 	    if(winScore<1){
                 winScore = 15000;
                 sendToChat("server.blue-won");
@@ -92,24 +92,24 @@ public class Siege extends Plugin {
         });
 
         handler.<Player>register("info", "Information about gamemode.", (args, player) -> {
-            Call.infoMessage(player.con, L10NBundle.format("commands.info", findLocale(player.locale)));
+            Call.infoMessage(player.con, Bundle.format("commands.info", findLocale(player.locale)));
         });
     }
 
     // Различные функции, выполняемые в коде.
 
     private static Locale findLocale(String code) {
-        Locale locale = Structs.find(L10NBundle.supportedLocales, l -> l.toString().equals(code) ||
+        Locale locale = Structs.find(Bundle.supportedLocales, l -> l.toString().equals(code) ||
                 code.startsWith(l.toString()));
-        return locale != null ? locale : L10NBundle.defaultLocale();
+        return locale != null ? locale : Bundle.defaultLocale();
     }
 
     public static void sendToChat(String key, Object... values) {
-        Groups.player.each(p -> p.sendMessage(L10NBundle.format(key, findLocale(p.locale), values)));
+        Groups.player.each(p -> p.sendMessage(Bundle.format(key, findLocale(p.locale), values)));
     }
 
     public static void bundled(Player player, String key, Object... values) {
-        player.sendMessage(L10NBundle.format(key, findLocale(player.locale), values));
+        player.sendMessage(Bundle.format(key, findLocale(player.locale), values));
     }
 
     public static String colorizedTeam(Team team){
