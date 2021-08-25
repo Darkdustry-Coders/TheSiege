@@ -58,11 +58,11 @@ public class Siege extends Plugin {
 
         Events.on(PlayerJoin.class, event -> {
             if(event.player.getInfo().timesJoined <= 1) {
-                String[][] optionsStart = {
+                String[][] optionsFirst = {
                         {Bundle.format("server.first-join.yes", findLocale(event.player.locale))},
                         {Bundle.format("server.first-join.no", findLocale(event.player.locale))}
                 };
-                Call.menu(e.player.con, 1, Bundle.format("server.first-join.header", findLocale(event.player.locale)), Bundle.format("server.first-join.content", findLocale(event.player.locale)), optionsFirst);
+                Call.menu(event.player.con, 1, Bundle.format("server.first-join.header", findLocale(event.player.locale)), Bundle.format("server.first-join.content", findLocale(event.player.locale)), optionsFirst);
             }
         });
 
