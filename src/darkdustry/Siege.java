@@ -11,6 +11,7 @@ import mindustry.gen.*;
 import mindustry.mod.Plugin;
 import mindustry.net.Administration;
 import mindustry.net.NetConnection;
+import mindustry.ui.Menus;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.units.*;
 
@@ -56,8 +57,13 @@ public class Siege extends Plugin {
         });
 
         Events.on(PlayerJoin.class, event -> {
-            // Предлагаем использовать /info
-            bundled(event.player, "the-siege.motd");
+            if(event.player.getInfo().timesJoined <= 1) {
+                String[][] optionsStart = {
+                        {Bundle.format("server.first-join.yes", findLocale(event.player.locale))},
+                        {Bundle.format("server.first-join.no", findLocale(event.player.locale))}
+                };
+                Call.menu(e.player.con, 1, Bundle.format("server.first-join.header", findLocale(event.player.locale)), Bundle.format("server.first-join.content", findLocale(event.player.locale)), optionsFirst);
+            }
         });
 
 	Timer.schedule(() -> {
@@ -75,6 +81,10 @@ public class Siege extends Plugin {
 		Events.fire(new EventType.GameOverEvent(Team.blue));
 	    }
 	}, 0, 1);
+
+        Menus.registerMenu(1, (player, selection) -> {
+            if (selection == 0) Call.sendMessage("test");
+        });
     }
 
     @Override
@@ -92,7 +102,7 @@ public class Siege extends Plugin {
         });
 
         handler.<Player>register("info", "Information about gamemode.", (args, player) -> {
-            Call.infoMessage(player.con, Bundle.format("commands.info", findLocale(player.locale)));
+            Call.menuChoose(player, 1, 0);
         });
     }
 
