@@ -83,7 +83,52 @@ public class Siege extends Plugin {
 	}, 0, 1);
 
         Menus.registerMenu(1, (player, selection) -> {
-            if (selection == 0) Call.sendMessage("test");
+            if (selection == 0) {
+                String[][] options = {
+                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
+                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
+                };
+                Call.menu(player.con, 2, Bundle.format("server.tutorial-1.header", findLocale(player.locale)), Bundle.format("server.tutorial-1.content", findLocale(player.locale)), options);
+            }
+        });
+
+        Menus.registerMenu(2, (player, selection) -> {
+            if (selection == 0) {
+                String[][] options = {
+                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
+                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
+                };
+                Call.menu(player.con, 3, Bundle.format("server.tutorial-2.header", findLocale(player.locale)), Bundle.format("server.tutorial-2.content", findLocale(player.locale)), options);
+            }
+        });
+
+        Menus.registerMenu(3, (player, selection) -> {
+            if (selection == 0) {
+                String[][] options = {
+                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
+                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
+                };
+                Call.menu(player.con, 4, Bundle.format("server.tutorial-3.header", findLocale(player.locale)), Bundle.format("server.tutorial-3.content", findLocale(player.locale)), options);
+            }
+        });
+
+        Menus.registerMenu(4, (player, selection) -> {
+            if (selection == 0) {
+                String[][] options = {
+                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
+                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
+                };
+                Call.menu(player.con, 5, Bundle.format("server.tutorial-4.header", findLocale(player.locale)), Bundle.format("server.tutorial-4.content", findLocale(player.locale)), options);
+            }
+        });
+
+        Menus.registerMenu(5, (player, selection) -> {
+            if (selection == 0) {
+                String[][] optionsFinal = {
+                    {Bundle.format("server.tutorial-final", findLocale(player.locale))}
+                };
+                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player.locale)), Bundle.format("server.tutorial-5.content", findLocale(player.locale)), options);
+            }
         });
     }
 
