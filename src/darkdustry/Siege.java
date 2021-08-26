@@ -127,7 +127,7 @@ public class Siege extends Plugin {
                 String[][] optionsFinal = {
                     {Bundle.format("server.tutorial-final", findLocale(player.locale))}
                 };
-                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player.locale)), Bundle.format("server.tutorial-5.content", findLocale(player.locale)), options);
+                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player.locale)), Bundle.format("server.tutorial-5.content", findLocale(player.locale)), optionsFinal);
             }
         });
     }
