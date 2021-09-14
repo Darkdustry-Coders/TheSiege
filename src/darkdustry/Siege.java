@@ -24,6 +24,8 @@ public class Siege extends Plugin {
     int foreshadowLimit = 4;
 
     public void init() {
+
+        //TODO объединить фильтры, чтобы уменьшить код
         netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
@@ -41,13 +43,9 @@ public class Siege extends Plugin {
             return true;
         });
 
-        Events.on(GameOverEvent.class, (e) -> {
-            cooldowns.clear();
-        });
-
-        Events.on(WorldLoadEvent.class, (c) -> {
+        Events.on(WorldLoadEvent.class, event -> {
             winScore = 1500;
-
+            cooldowns.clear();
             state.rules.unitDamageMultiplier = 2.0F;
             state.rules.unitBuildSpeedMultiplier = 2.0F;
             state.rules.blockDamageMultiplier = 0.6F;
@@ -58,10 +56,7 @@ public class Siege extends Plugin {
 
         Events.on(PlayerJoin.class, event -> {
             if(netServer.admins.getInfo(event.player.uuid()).timesJoined <= 1) {
-                String[][] optionsFirst = {
-                        {Bundle.format("server.first-join.yes", findLocale(event.player.locale))},
-                        {Bundle.format("server.first-join.no", findLocale(event.player.locale))}
-                };
+                String[][] optionsFirst = {{Bundle.format("server.first-join.yes", findLocale(event.player.locale))}, {Bundle.format("server.first-join.no", findLocale(event.player.locale))}};
                 Call.menu(event.player.con, 1, Bundle.format("server.first-join.header", findLocale(event.player.locale)), Bundle.format("server.first-join.content", findLocale(event.player.locale)), optionsFirst);
             }
         });
@@ -75,7 +70,7 @@ public class Siege extends Plugin {
 
 	    winScore -= state.serverPaused ? 0 : 1;
 	    Groups.player.each(p -> Call.infoPopup(p.con(), Bundle.format("server.progress", findLocale(p.locale), winScore), 1, Align.bottom, 0, 0, 0, 0));
-	    if(winScore<1){
+	    if (winScore < 1) {
                 winScore = 15000;
                 sendToChat("server.blue-won");
 		Events.fire(new EventType.GameOverEvent(Team.blue));
@@ -84,50 +79,36 @@ public class Siege extends Plugin {
 
         Menus.registerMenu(1, (player, selection) -> {
             if (selection == 0) {
-                String[][] options = {
-                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
-                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
-                };
+                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player.locale))}, {Bundle.format("server.tutorial.no", findLocale(player.locale))}};
                 Call.menu(player.con, 2, Bundle.format("server.tutorial-1.header", findLocale(player.locale)), Bundle.format("server.tutorial-1.content", findLocale(player.locale)), options);
             }
         });
 
         Menus.registerMenu(2, (player, selection) -> {
             if (selection == 0) {
-                String[][] options = {
-                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
-                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
-                };
+                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player.locale))}, {Bundle.format("server.tutorial.no", findLocale(player.locale))}};
                 Call.menu(player.con, 3, Bundle.format("server.tutorial-2.header", findLocale(player.locale)), Bundle.format("server.tutorial-2.content", findLocale(player.locale)), options);
             }
         });
 
         Menus.registerMenu(3, (player, selection) -> {
             if (selection == 0) {
-                String[][] options = {
-                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
-                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
-                };
+                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player.locale))}, {Bundle.format("server.tutorial.no", findLocale(player.locale))}};
                 Call.menu(player.con, 4, Bundle.format("server.tutorial-3.header", findLocale(player.locale)), Bundle.format("server.tutorial-3.content", findLocale(player.locale)), options);
             }
         });
 
         Menus.registerMenu(4, (player, selection) -> {
             if (selection == 0) {
-                String[][] options = {
-                    {Bundle.format("server.tutorial.yes", findLocale(player.locale))},
-                    {Bundle.format("server.tutorial.no", findLocale(player.locale))}
-                };
+                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player.locale))}, {Bundle.format("server.tutorial.no", findLocale(player.locale))}};
                 Call.menu(player.con, 5, Bundle.format("server.tutorial-4.header", findLocale(player.locale)), Bundle.format("server.tutorial-4.content", findLocale(player.locale)), options);
             }
         });
 
         Menus.registerMenu(5, (player, selection) -> {
             if (selection == 0) {
-                String[][] optionsFinal = {
-                    {Bundle.format("server.tutorial-final", findLocale(player.locale))}
-                };
-                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player.locale)), Bundle.format("server.tutorial-5.content", findLocale(player.locale)), optionsFinal);
+                String[][] optionFinal = {{Bundle.format("server.tutorial-final", findLocale(player.locale))}};
+                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player.locale)), Bundle.format("server.tutorial-5.content", findLocale(player.locale)), optionFinal);
             }
         });
     }
@@ -160,7 +141,7 @@ public class Siege extends Plugin {
     }
 
     public static void sendToChat(String key, Object... values) {
-        Groups.player.each(p -> p.sendMessage(Bundle.format(key, findLocale(p.locale), values)));
+        Groups.player.each(p -> bundled(p, key, values));
     }
 
     public static void bundled(Player player, String key, Object... values) {
