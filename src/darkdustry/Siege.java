@@ -15,7 +15,6 @@ import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
-import mindustry.net.Administration;
 import mindustry.ui.Menus;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
@@ -34,21 +33,17 @@ public class Siege extends Plugin {
     public void init() {
 
         netServer.admins.addActionFilter((action) -> {
-            if (action.player.team() == Team.blue) {
-                if (action.type == Administration.ActionType.placeBlock && action.block == Blocks.foreshadow && Groups.build.count(build -> build.team == Team.blue && build.block == Blocks.foreshadow) > foreshadowLimit) {
-                    bundled(action.player, "server.foreshadow-limit", foreshadowLimit);
-                    return false;
-                }
+            if (action.player.team() == Team.green) {
+                return !(action.block instanceof Turret && !(action.block == Blocks.wave));
+            } else {
                 return !(action.block instanceof UnitFactory || action.block instanceof Reconstructor);
-            } else return !(action.block instanceof Turret && !(action.block == Blocks.wave));
+            }
         });
 
         Events.on(WorldLoadEvent.class, event -> {
             winScore = 1500;
             cooldowns.clear();
-            state.rules.unitDamageMultiplier = 2.0F;
-            state.rules.unitBuildSpeedMultiplier = 2.0F;
-            state.rules.blockDamageMultiplier = 0.6F;
+
             UnitTypes.poly.weapons.clear();
             Bullets.missileSurge.damage = 10.0F;
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
