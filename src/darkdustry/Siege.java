@@ -28,7 +28,7 @@ import static mindustry.Vars.*;
 
 public class Siege extends Plugin {
     private final Seq<String> cooldowns = new Seq<>();
-    private final int foreshadowLimit = 4;
+
     private int winScore = 1500;
 
     public void init() {
