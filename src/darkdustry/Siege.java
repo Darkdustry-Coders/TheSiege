@@ -7,8 +7,7 @@ import mindustry.content.Blocks;
 import mindustry.content.Bullets;
 import mindustry.content.Items;
 import mindustry.content.UnitTypes;
-import mindustry.game.EventType;
-import mindustry.game.EventType.PlayerJoin;
+import mindustry.game.EventType.GameOverEvent;
 import mindustry.game.EventType.WorldLoadEvent;
 import mindustry.game.Team;
 import mindustry.gen.Call;
@@ -58,7 +57,7 @@ public class Siege extends Plugin {
 	    if (winScore < 1) {
                 winScore = 15000;
                 sendToChat("server.blue-won");
-		Events.fire(new EventType.GameOverEvent(Team.blue));
+		Events.fire(new GameOverEvent(Team.blue));
 	    }
 	}, 0, 1);
     }
