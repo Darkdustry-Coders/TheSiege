@@ -15,7 +15,6 @@ import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
-import mindustry.ui.Menus;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
@@ -49,13 +48,6 @@ public class Siege extends Plugin {
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
 
-        Events.on(PlayerJoin.class, event -> {
-            if (netServer.admins.getInfo(event.player.uuid()).timesJoined <= 1) {
-                String[][] optionsFirst = {{Bundle.format("server.first-join.yes", findLocale(event.player))}, {Bundle.format("server.first-join.no", findLocale(event.player))}};
-                Call.menu(event.player.con, 1, Bundle.format("server.first-join.header", findLocale(event.player)), Bundle.format("server.first-join.content", findLocale(event.player)), optionsFirst);
-            }
-        });
-
 	Timer.schedule(() -> {
 	    if (!state.serverPaused) {
 	        state.teams.active.each((team) -> team.core() != null, (team) -> content.items().each((item) -> team.core().items.add(item, team.cores.size * 100)));
@@ -69,41 +61,6 @@ public class Siege extends Plugin {
 		Events.fire(new EventType.GameOverEvent(Team.blue));
 	    }
 	}, 0, 1);
-
-        Menus.registerMenu(1, (player, selection) -> {
-            if (selection == 0) {
-                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player))}, {Bundle.format("server.tutorial.no", findLocale(player))}};
-                Call.menu(player.con, 2, Bundle.format("server.tutorial-1.header", findLocale(player)), Bundle.format("server.tutorial-1.content", findLocale(player)), options);
-            }
-        });
-
-        Menus.registerMenu(2, (player, selection) -> {
-            if (selection == 0) {
-                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player))}, {Bundle.format("server.tutorial.no", findLocale(player))}};
-                Call.menu(player.con, 3, Bundle.format("server.tutorial-2.header", findLocale(player)), Bundle.format("server.tutorial-2.content", findLocale(player)), options);
-            }
-        });
-
-        Menus.registerMenu(3, (player, selection) -> {
-            if (selection == 0) {
-                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player))}, {Bundle.format("server.tutorial.no", findLocale(player))}};
-                Call.menu(player.con, 4, Bundle.format("server.tutorial-3.header", findLocale(player)), Bundle.format("server.tutorial-3.content", findLocale(player)), options);
-            }
-        });
-
-        Menus.registerMenu(4, (player, selection) -> {
-            if (selection == 0) {
-                String[][] options = {{Bundle.format("server.tutorial.yes", findLocale(player))}, {Bundle.format("server.tutorial.no", findLocale(player))}};
-                Call.menu(player.con, 5, Bundle.format("server.tutorial-4.header", findLocale(player)), Bundle.format("server.tutorial-4.content", findLocale(player)), options);
-            }
-        });
-
-        Menus.registerMenu(5, (player, selection) -> {
-            if (selection == 0) {
-                String[][] optionFinal = {{Bundle.format("server.tutorial-final", findLocale(player))}};
-                Call.menu(player.con, 6, Bundle.format("server.tutorial-5.header", findLocale(player)), Bundle.format("server.tutorial-5.content", findLocale(player)), optionFinal);
-            }
-        });
     }
 
     @Override
@@ -119,8 +76,6 @@ public class Siege extends Plugin {
             cooldowns.add(player.uuid());
             player.unit().kill();
         });
-
-        handler.<Player>register("info", "Information about gamemode.", (args, player) -> Call.menuChoose(player, 1, 0));
     }
 
     // Различные функции, выполняемые в коде.
