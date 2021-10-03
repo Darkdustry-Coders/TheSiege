@@ -54,7 +54,10 @@ public class Logic {
             Vars.netServer.sendWorldData(player);
         });
 
+        Call.setRules(Siege.rules);
         Vars.logic.play();
+        state.rules = Siege.rules;
+        Call.setRules(state.rules);
 
         Timer.schedule(() -> worldLoaded = true, 7.5f);
     }
