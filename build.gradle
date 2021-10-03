@@ -1,58 +1,32 @@
 import groovy.json.*
 
-apply plugin: 'java'
+apply plugin: "java"
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
-
-sourceCompatibility = 14
-targetCompatibility = 1.8
-
-sourceSets.main {
-    java.srcDirs = ['src']
-    resources.srcDirs = ['src/resources']
-}
-
-repositories {
+repositories{
     mavenCentral()
-    maven { url 'https://www.jitpack.io' }
+    maven{ url 'https://jitpack.io' }
 }
 
-ext {
-    def json = new JsonSlurper()
-    def pluginFile = file("${sourceSets.main.resources.srcDirs.last()}/plugin.json")
-    def plugin = json.parseText(pluginFile.text)
+ext{
+    project.version = '2.0'
 
-    artifactBaseName = plugin.name + (!plugin.version.isEmpty() ? "-$plugin.version" : "")
-
-    versions = [:]
-    versions.mindustry = 'v' + plugin.minGameVersion
-    versions.jabel = '0.3.1'
+    mindustryVersion = 'v131'
 }
 
-dependencies {
-    compileOnly "com.github.Anuken.Arc:arc-core:$versions.mindustry"
-    compileOnly "com.github.Anuken.Mindustry:core:$versions.mindustry"
-
-    annotationProcessor "com.github.MindustryInside:jabel:$versions.jabel"
+dependencies{
+    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
 }
 
-tasks.withType(JavaCompile) {
-    if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
-        options.compilerArgs = ['--release', '8', '--enable-preview']
-    }
-
-    options.compilerArgs << '-Xplugin:jabel'
-
-    doFirst {
-        options.compilerArgs = options.compilerArgs.findAll{ it != '--enable-preview' }
+jar{
+    from{
+        configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
     }
 }
 
-jar {
-    archiveBaseName.set artifactBaseName
-    from {
-        configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it) }
-    }
+rootProject.tasks.named("jar") {
+    duplicatesStrategy = 'include'
 }

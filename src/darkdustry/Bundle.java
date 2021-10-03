@@ -4,6 +4,8 @@ import arc.files.Fi;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.Vars;
+import mindustry.gen.Groups;
+import mindustry.gen.Player;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -47,11 +49,6 @@ public class Bundle{
         return bundle != null && bundle.containsKey(key) ? bundle.get(key) : "???" + key + "???";
     }
 
-    public static boolean has(String key, Locale locale){
-        StringMap props = getOrLoad(locale);
-        return props != null && props.containsKey(key);
-    }
-
     public static String format(String key, Locale locale, Object... values){
         String pattern = get(key, locale);
         MessageFormat format = formats.get(locale);
@@ -86,5 +83,18 @@ public class Bundle{
             properties.put(s, bundle.getString(s));
         }
         return properties;
+    }
+
+    public static Locale findLocale(Player player) {
+        Locale locale = Structs.find(supportedLocales, l -> l.toString().equals(player.locale) || player.locale.startsWith(l.toString()));
+        return locale != null ? locale : defaultLocale();
+    }
+
+    public static void sendToChat(String key, Object... values) {
+        Groups.player.each(p -> bundled(p, key, values));
+    }
+
+    public static void bundled(Player player, String key, Object... values) {
+        player.sendMessage(format(key, findLocale(player), values));
     }
 }

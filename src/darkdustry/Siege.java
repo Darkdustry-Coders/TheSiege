@@ -7,32 +7,32 @@ import mindustry.content.Blocks;
 import mindustry.content.Bullets;
 import mindustry.content.Items;
 import mindustry.content.UnitTypes;
-import mindustry.game.EventType.GameOverEvent;
-import mindustry.game.EventType.WorldLoadEvent;
-import mindustry.game.EventType.ServerLoadEvent;
+import mindustry.game.EventType;
+import mindustry.game.Rules;
 import mindustry.game.Team;
-import mindustry.gen.Call;
-import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
-import mindustry.world.blocks.defense.Wall;
-import mindustry.world.blocks.storage.CoreBlock;
 
-import java.util.Locale;
-import java.util.Objects;
-
-import static mindustry.Vars.*;
+import static mindustry.Vars.netServer;
 
 public class Siege extends Plugin {
-    private final Seq<String> cooldowns = new Seq<>();
+    public static final Seq<String> cooldowns = new Seq<>();
 
-    private int winScore = 1500;
+    public static int winScore = 1500;
+    public static Logic logic;
+    public static Rules rules;
 
     public void init() {
+        rules = new Rules();
+        rules.pvp = true;
+        rules.canGameOver = false;
+        rules.waves = true;
+        rules.waveTimer = false;
+        rules.waveSpacing = 30 * Time.toMinutes;
 
         netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
@@ -42,7 +42,7 @@ public class Siege extends Plugin {
             }
         });
 
-        Events.on(WorldLoadEvent.class, event -> {
+        Events.on(EventType.WorldLoadEvent.class, event -> {
             winScore = 1500;
             cooldowns.clear();
 
@@ -51,54 +51,39 @@ public class Siege extends Plugin {
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
 
-	Timer.schedule(() -> {
-	    if (!state.serverPaused) {
-	        state.teams.active.each(team -> team.core() != null, team -> content.items().each(item -> item != Items.blastCompound, item -> team.core().items.add(item, team.cores.size * 100)));
-	    }
+        logic = new Logic();
+        Timer.schedule(() -> logic.update(), 0, 1);
 
-	    winScore -= state.serverPaused ? 0 : 1;
-	    Groups.player.each(p -> Call.infoPopup(p.con(), Bundle.format("server.progress", findLocale(p), winScore), 1, Align.bottom, 0, 0, 0, 0));
-	    if (winScore < 1) {
-                winScore = 15000;
-                sendToChat("server.blue-won");
-		Events.fire(new GameOverEvent(Team.blue));
-	    }
-	}, 0, 1);
-
-        Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
+        Events.on(EventType.ServerLoadEvent.class, e -> {
+            logic.restart();
+            Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
+            netServer.openServer();
+        });
     }
 
     @Override
     public void registerClientCommands(CommandHandler handler) {
         handler.<Player>register("changeteam", "Change team - once per game.", (args, player) -> {
             if (cooldowns.contains(player.uuid())) {
-                bundled(player, "commands.team.cooldown");
+                Bundle.bundled(player, "commands.team.cooldown");
                 return;
             }
             Team team = player.team() == Team.green ? Team.blue : Team.green;
             player.team(team);
-            bundled(player, "commands.team.changed", colorizedTeam(team));
+            Bundle.bundled(player, "commands.team.changed", colorizedTeam(team));
             cooldowns.add(player.uuid());
             if (player.unit() != null) player.unit().kill();
         });
     }
 
-    // Различные функции, выполняемые в коде.
-
-    private static Locale findLocale(Player player) {
-        Locale locale = Structs.find(Bundle.supportedLocales, l -> l.toString().equals(player.locale) || player.locale.startsWith(l.toString()));
-        return locale != null ? locale : Bundle.defaultLocale();
+    @Override
+    public void registerServerCommands(CommandHandler handler) {
+        // Breaks the game
+        handler.removeCommand("gameover");
+        handler.register("gameover", "End the game.", args -> logic.endGame(Team.green));
     }
 
-    public static void sendToChat(String key, Object... values) {
-        Groups.player.each(p -> bundled(p, key, values));
-    }
-
-    public static void bundled(Player player, String key, Object... values) {
-        player.sendMessage(Bundle.format(key, findLocale(player), values));
-    }
-
-    public static String colorizedTeam(Team team){
+    public static String colorizedTeam(Team team) {
         return Strings.format("[#@]@", team.color, team);
     }
 }
