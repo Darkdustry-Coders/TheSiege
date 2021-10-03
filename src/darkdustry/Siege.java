@@ -9,6 +9,7 @@ import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType.GameOverEvent;
 import mindustry.game.EventType.WorldLoadEvent;
+import mindustry.game.EventType.ServerLoadEvent;
 import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
@@ -22,6 +23,7 @@ import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.storage.CoreBlock;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import static mindustry.Vars.*;
 
@@ -49,7 +51,7 @@ public class Siege extends Plugin {
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
 
-        Events.on(EventType.ServerLoadEvent.class, e -> {
+        Events.on(ServerLoadEvent.class, e -> {
             content.blocks().each(Objects::nonNull, block ->{
                 if (block instanceof CoreBlock) block.health *= 0.75;
                 else if (block instanceof Wall) block.health *= 0.5;
