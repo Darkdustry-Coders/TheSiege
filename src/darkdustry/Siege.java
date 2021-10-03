@@ -18,6 +18,8 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.storage.CoreBlock;
 
 import java.util.Locale;
 
@@ -43,13 +45,23 @@ public class Siege extends Plugin {
             cooldowns.clear();
 
             UnitTypes.poly.weapons.clear();
-            Bullets.missileSurge.damage = 10.0F;
+            Bullets.missileSurge.damage = 10.0f;
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
+        });
+
+        Events.on(EventType.ServerLoadEvent.class, e -> {
+            content.blocks().each(Objects::nonNull, block ->{
+                if (block instanceof CoreBlock) block.health *= 0.75;
+                else if (block instanceof Wall) block.health *= 0.5;
+            });
+
+            // TODO автозапуск сервера, своя логика геймовера.
+            Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
         });
 
 	Timer.schedule(() -> {
 	    if (!state.serverPaused) {
-	        state.teams.active.each((team) -> team.core() != null, (team) -> content.items().each((item) -> team.core().items.add(item, team.cores.size * 100)));
+	        state.teams.active.each(team -> team.core() != null, team -> content.items().each(item -> item != Items.blastCompound, item -> team.core().items.add(item, team.cores.size * 100)));
 	    }
 
 	    winScore -= state.serverPaused ? 0 : 1;
@@ -73,7 +85,7 @@ public class Siege extends Plugin {
             player.team(team);
             bundled(player, "commands.team.changed", colorizedTeam(team));
             cooldowns.add(player.uuid());
-            player.unit().kill();
+            if (player.unit() != null) player.unit().kill();
         });
     }
 
