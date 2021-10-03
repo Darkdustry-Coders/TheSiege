@@ -51,16 +51,6 @@ public class Siege extends Plugin {
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
         });
 
-        Events.on(ServerLoadEvent.class, e -> {
-            content.blocks().each(Objects::nonNull, block ->{
-                if (block instanceof CoreBlock) block.health *= 0.75;
-                else if (block instanceof Wall) block.health *= 0.5;
-            });
-
-            // TODO автозапуск сервера, своя логика геймовера.
-            Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
-        });
-
 	Timer.schedule(() -> {
 	    if (!state.serverPaused) {
 	        state.teams.active.each(team -> team.core() != null, team -> content.items().each(item -> item != Items.blastCompound, item -> team.core().items.add(item, team.cores.size * 100)));
@@ -74,6 +64,8 @@ public class Siege extends Plugin {
 		Events.fire(new GameOverEvent(Team.blue));
 	    }
 	}, 0, 1);
+
+        Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
     }
 
     @Override
