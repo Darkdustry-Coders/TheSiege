@@ -33,7 +33,9 @@ public class Siege extends Plugin {
         rules.waves = true;
         rules.waveTimer = false;
         rules.waveSpacing = 30 * Time.toMinutes;
+        rules.polygonCoreProtection = true;
         rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.blockForge, Blocks.blockLoader, Blocks.blockUnloader, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
+        rules.bannedBlocks.addAll(Blocks.foreshadow);
 
         netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
