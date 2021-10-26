@@ -18,6 +18,7 @@ import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 
 import static mindustry.Vars.netServer;
+import static mindustry.Vars.state;
 
 public class Siege extends Plugin {
     public static final Seq<String> cooldowns = new Seq<>();
@@ -47,6 +48,7 @@ public class Siege extends Plugin {
         });
 
         Events.on(EventType.WorldLoadEvent.class, event -> {
+            Timer.schedule(() -> Log.info("Загружена карта @", state.map.name()), 1f);
             winScore = 1500;
             cooldowns.clear();
 
