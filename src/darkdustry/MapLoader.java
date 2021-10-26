@@ -10,7 +10,7 @@ public class MapLoader implements Cons<Tiles> {
     Tiles saved;
 
     public MapLoader() {
-        Vars.world.loadMap(Vars.maps.getNextMap(Gamemode.pvp, null), Siege.rules.copy());
+        Vars.world.loadMap(Vars.maps.getNextMap(Gamemode.pvp, Vars.state.map), Siege.rules.copy());
         saved = Vars.world.tiles;
         width = saved.width;
         height = saved.height;
