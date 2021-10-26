@@ -3,6 +3,7 @@ package darkdustry;
 import arc.func.Cons;
 import mindustry.Vars;
 import mindustry.game.Gamemode;
+import mindustry.maps.Map;
 import mindustry.world.Tiles;
 
 public class MapLoader implements Cons<Tiles> {
@@ -10,7 +11,9 @@ public class MapLoader implements Cons<Tiles> {
     Tiles saved;
 
     public MapLoader() {
-        Vars.world.loadMap(Vars.maps.getNextMap(Gamemode.pvp, Vars.state.map), Siege.rules.copy());
+        Map map = Vars.maps.getNextMap(Gamemode.pvp, Vars.state.map);
+        Log.info("Загружаю карту @ (@)", map.name(), map.file.nameWithoutExtension());
+        Vars.world.loadMap(map, Siege.rules.copy());
         saved = Vars.world.tiles;
         width = saved.width;
         height = saved.height;
