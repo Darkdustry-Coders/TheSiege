@@ -4,6 +4,7 @@ import arc.files.Fi;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.Vars;
+import mindustry.gen.Iconc;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 
@@ -37,8 +38,6 @@ public class Bundle{
                 supportedLocales[i] = new Locale(code);
             }
         }
-
-        Log.debug("Loaded locales: @", Arrays.toString(supportedLocales));
     }
 
     private Bundle(){
@@ -68,7 +67,7 @@ public class Bundle{
         StringMap bundle = bundles.get(locale);
         if(bundle == null && locale.getDisplayName().equals("router")){ // router
             StringMap router = new StringMap();
-            getOrLoad(defaultLocale()).each((k, v) -> router.put(k, "router"));
+            getOrLoad(defaultLocale()).each((k, v) -> router.put(k, Strings.stripColors(v).replaceAll("[\\d\\D]", Character.toString(Iconc.blockRouter))));
             bundles.put(locale, bundle = router);
         }else if(bundle == null && Structs.contains(supportedLocales, locale)){
             bundles.put(locale, bundle = load(locale));
