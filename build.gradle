@@ -1,12 +1,10 @@
-import groovy.json.*
-
 apply plugin: "java"
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 sourceSets.main {
-    java.srcDirs = ['src/darkdustry']
+    java.srcDirs = ['src']
     resources.srcDirs = ['src/resources']
 }
 
@@ -18,7 +16,7 @@ repositories{
 ext{
     project.version = '2.0'
 
-    mindustryVersion = 'v131'
+    mindustryVersion = 'v134.1'
 }
 
 dependencies{

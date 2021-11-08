@@ -37,7 +37,9 @@ public class Siege extends Plugin {
         rules.polygonCoreProtection = true;
         rules.logicUnitBuild = false;
         rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
-        rules.bannedBlocks.addAll(Blocks.foreshadow);
+        rules.teams.get(Team.blue).blockHealthMultiplier = 1.5f;
+        rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
+        rules.cleanupDeadTeams = true;
 
         netServer.admins.addActionFilter((action) -> {
             if (action.player.team() == Team.green) {
