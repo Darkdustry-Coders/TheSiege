@@ -18,7 +18,7 @@ import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
 public class Siege extends Plugin {
