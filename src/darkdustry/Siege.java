@@ -1,5 +1,6 @@
 package darkdustry;
 
+import arc.Core;
 import arc.Events;
 import arc.struct.Seq;
 import arc.util.*;
@@ -8,8 +9,8 @@ import mindustry.content.Bullets;
 import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
-import mindustry.game.Rules;
 import mindustry.game.Team;
+import mindustry.gen.Call;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
@@ -17,7 +18,7 @@ import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 
-import static mindustry.Vars.netServer;
+import static mindustry.Vars.*;
 import static mindustry.Vars.state;
 
 public class Siege extends Plugin {
@@ -25,23 +26,9 @@ public class Siege extends Plugin {
 
     public static int winScore = 1500;
     public static Logic logic;
-    public static Rules rules;
 
     public void init() {
-        rules = new Rules();
-        rules.pvp = true;
-        rules.canGameOver = false;
-        rules.waves = true;
-        rules.waveTimer = false;
-        rules.waveSpacing = 30 * Time.toMinutes;
-        rules.polygonCoreProtection = true;
-        rules.logicUnitBuild = false;
-        rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
-        rules.teams.get(Team.blue).blockHealthMultiplier = 1.5f;
-        rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
-        rules.cleanupDeadTeams = true;
-
-        netServer.admins.addActionFilter((action) -> {
+        netServer.admins.addActionFilter(action -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
             } else {
@@ -50,23 +37,31 @@ public class Siege extends Plugin {
         });
 
         Events.on(EventType.WorldLoadEvent.class, event -> {
-            Timer.schedule(() -> Log.info("Загружена карта @", state.map.name()), 1f);
             winScore = 1500;
             cooldowns.clear();
 
+            Core.app.post(() -> {
+                state.rules.waves = false;
+                state.rules.waveTimer = false;
+                state.rules.polygonCoreProtection = true;
+                state.rules.logicUnitBuild = false;
+                state.rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
+                state.rules.teams.get(Team.blue).blockHealthMultiplier = 1.5f;
+                state.rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
+                state.rules.teams.get(Team.green).unitBuildSpeedMultiplier = 0.8f;
+                state.rules.cleanupDeadTeams = true;
+                Call.setRules(state.rules);
+            });
+
             UnitTypes.poly.weapons.clear();
-            Bullets.missileSurge.damage = 10.0f;
-            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750;
+            Bullets.missileSurge.damage = 8f;
+            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750f;
         });
 
         logic = new Logic();
-        Timer.schedule(() -> logic.update(), 0, 1);
+        Timer.schedule(() -> logic.update(), 0f, 1f);
 
-        Events.on(EventType.ServerLoadEvent.class, e -> {
-            logic.restart();
-            Log.info("[Darkdustry] The Siege loaded. Hosting a server...");
-            netServer.openServer();
-        });
+        Events.on(EventType.ServerLoadEvent.class, e -> Log.info("[Darkdustry] The Siege loaded. Hosting a server..."));
     }
 
     @Override
@@ -77,21 +72,10 @@ public class Siege extends Plugin {
                 return;
             }
             Team team = player.team() == Team.green ? Team.blue : Team.green;
+            player.clearUnit();
             player.team(team);
-            Bundle.bundled(player, "commands.team.changed", colorizedTeam(team));
             cooldowns.add(player.uuid());
-            if (player.unit() != null) player.unit().kill();
+            Bundle.bundled(player, "commands.team.changed", Logic.colorizedTeam(team));
         });
-    }
-
-    @Override
-    public void registerServerCommands(CommandHandler handler) {
-        // Breaks the game
-        handler.removeCommand("gameover");
-        handler.register("gameover", "End the game.", args -> logic.endGame(Team.green));
-    }
-
-    public static String colorizedTeam(Team team) {
-        return Strings.format("[#@]@", team.color, team);
     }
 }
