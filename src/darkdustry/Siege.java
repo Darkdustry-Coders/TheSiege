@@ -25,7 +25,6 @@ public class Siege extends Plugin {
     public static final Seq<String> cooldowns = new Seq<>();
 
     public static int winScore = 1500;
-    public static Logic logic;
 
     public void init() {
         netServer.admins.addActionFilter(action -> {
@@ -46,6 +45,7 @@ public class Siege extends Plugin {
                 state.rules.polygonCoreProtection = true;
                 state.rules.logicUnitBuild = false;
                 state.rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
+                state.rules.bannedBlocks.addAll(Blocks.constructor, Blocks.largeConstructor, Blocks.deconstructor, Blocks.swarmer);
                 state.rules.teams.get(Team.blue).blockHealthMultiplier = 1.5f;
                 state.rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
                 state.rules.teams.get(Team.green).unitBuildSpeedMultiplier = 0.8f;
@@ -58,10 +58,9 @@ public class Siege extends Plugin {
             ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750f;
         });
 
-        logic = new Logic();
-        Timer.schedule(() -> logic.update(), 0f, 1f);
+        Timer.schedule(Logic::update, 0f, 1f);
 
-        Events.on(EventType.ServerLoadEvent.class, e -> Log.info("[Darkdustry] The Siege loaded. Hosting a server..."));
+        Events.on(EventType.ServerLoadEvent.class, e -> Log.info("[Darkdustry] The Siege loaded..."));
     }
 
     @Override

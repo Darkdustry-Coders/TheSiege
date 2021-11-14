@@ -13,7 +13,7 @@ import static mindustry.Vars.content;
 import static mindustry.Vars.state;
 public class Logic {
 
-    public void update() {
+    public static void update() {
         if (!state.serverPaused) {
             Siege.winScore--;
             state.teams.active.each(team -> team.core() != null, team -> content.items().each(item -> item != Items.blastCompound, item -> team.core().items.add(item, team.cores.size * 50)));
@@ -22,6 +22,7 @@ public class Logic {
         Groups.player.each(p -> Call.infoPopup(p.con(), Bundle.format("server.progress", Bundle.findLocale(p), Siege.winScore), 1, Align.bottom, 0, 0, 0, 0));
         if (Siege.winScore < 1) {
             Siege.winScore = 15000;
+            Bundle.sendToChat("events.win.blue");
             Events.fire(new EventType.GameOverEvent(Team.blue));
         }
     }
