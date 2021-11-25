@@ -27,6 +27,8 @@ public class Siege extends Plugin {
     public static int winScore = 1500;
 
     public void init() {
+        UnitTypes.poly.weapons.clear();
+
         netServer.admins.addActionFilter(action -> {
             if (action.player.team() == Team.green) {
                 return !(action.block instanceof Turret && !(action.block == Blocks.wave));
@@ -55,7 +57,6 @@ public class Siege extends Plugin {
 
             for (int i = 0; i < 8; i++) {
                 Unit u = UnitTypes.poly.spawn(Team.blue, world.width() * tilesize / 2f, world.height() * tilesize / 2f);
-                u.abilities.clear();
                 u.maxHealth = Integer.MAX_VALUE;
                 u.health = u.maxHealth;
                 u.armor = 0f;
