@@ -55,7 +55,7 @@ public class Siege extends Plugin {
 
             for (int i = 0; i < 8; i++) {
                 Unit u = UnitTypes.poly.spawn(Team.blue, world.width() * tilesize / 2f, world.height() * tilesize / 2f);
-                u.weapons.clear()
+                u.weapons.clear();
                 u.maxHealth = Integer.MAX_VALUE;
                 u.health = u.maxHealth;
                 u.armor = 0f;
