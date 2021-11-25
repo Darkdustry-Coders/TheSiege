@@ -5,21 +5,21 @@ import arc.Events;
 import arc.struct.Seq;
 import arc.util.*;
 import mindustry.content.Blocks;
-import mindustry.content.Bullets;
-import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.gen.Player;
+import mindustry.get.Unit;
 import mindustry.mod.Plugin;
-import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 
 import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
+import static mindustry.Vars.world;
+import static mindustry.Vars.tilesize;
 
 public class Siege extends Plugin {
     public static final Seq<String> cooldowns = new Seq<>();
@@ -53,9 +53,13 @@ public class Siege extends Plugin {
                 Call.setRules(state.rules);
             });
 
-            UnitTypes.poly.weapons.clear();
-            Bullets.missileSurge.damage = 8f;
-            ((ItemTurret)Blocks.foreshadow).ammoTypes.get(Items.surgeAlloy).damage = 750f;
+            for (int i = 0; i < 8; i++) {
+                Unit u = UnitTypes.poly.spawn(Team.blue, world.width() * tilesize / 2f, world.height() * tilesize / 2f);
+                u.weapons.clear()
+                u.maxHealth = Integer.MAX_VALUE;
+                u.health = u.maxHealth;
+                u.armor = 0f;
+            }
         });
 
         Timer.schedule(Logic::update, 0f, 1f);
