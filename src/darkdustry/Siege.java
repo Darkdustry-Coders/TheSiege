@@ -52,6 +52,7 @@ public class Siege extends Plugin {
                 state.rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
                 state.rules.teams.get(Team.green).unitBuildSpeedMultiplier = 0.8f;
                 state.rules.cleanupDeadTeams = true;
+                state.rules.modeName = "Siege";
                 Call.setRules(state.rules);
             });
 
