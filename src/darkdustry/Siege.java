@@ -49,19 +49,12 @@ public class Siege extends Plugin {
                 state.rules.revealedBlocks.addAll(Blocks.duct, Blocks.ductRouter, Blocks.ductBridge, Blocks.thruster, Blocks.scrapWall, Blocks.scrapWallLarge, Blocks.scrapWallHuge, Blocks.scrapWallGigantic);
                 state.rules.bannedBlocks.addAll(Blocks.constructor, Blocks.largeConstructor, Blocks.deconstructor, Blocks.swarmer);
                 state.rules.teams.get(Team.blue).blockHealthMultiplier = 1.5f;
-                state.rules.teams.get(Team.blue).buildSpeedMultiplier = 1.2f;
+                state.rules.teams.get(Team.blue).buildSpeedMultiplier = 2f;
                 state.rules.teams.get(Team.green).unitBuildSpeedMultiplier = 0.8f;
                 state.rules.cleanupDeadTeams = true;
                 state.rules.modeName = "Siege";
                 Call.setRules(state.rules);
             });
-
-            for (int i = 0; i < 8; i++) {
-                Unit u = UnitTypes.poly.spawn(Team.blue, world.width() * tilesize / 2f, world.height() * tilesize / 2f);
-                u.maxHealth = Integer.MAX_VALUE;
-                u.health = u.maxHealth;
-                u.armor = 0f;
-            }
         });
 
         Timer.schedule(Logic::update, 0f, 1f);
