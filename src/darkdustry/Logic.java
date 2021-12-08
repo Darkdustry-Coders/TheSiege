@@ -11,8 +11,8 @@ import mindustry.gen.Groups;
 
 import static mindustry.Vars.content;
 import static mindustry.Vars.state;
-public class Logic {
 
+public class Logic {
     public static void update() {
         if (!state.serverPaused) {
             Siege.winScore--;
