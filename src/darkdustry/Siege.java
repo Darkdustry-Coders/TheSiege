@@ -60,12 +60,12 @@ public class Siege extends Plugin {
 
         Timer.schedule(Logic::update, 0f, 1f);
 
-        Events.on(EventType.ServerLoadEvent.class, e -> Log.info("[Darkdustry] The Siege loaded..."));
+        Log.info("[Darkdustry] The Siege loaded...");
     }
 
     @Override
     public void registerClientCommands(CommandHandler handler) {
-        handler.<Player>register("changeteam", "Change team - once per game.", (args, player) -> {
+        handler.<Player>register("changeteam", "commands.changeteam.description", (args, player) -> {
             if (cooldowns.contains(player.uuid())) {
                 Bundle.bundled(player, "commands.team.cooldown");
                 return;
